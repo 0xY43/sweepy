@@ -1,6 +1,6 @@
 ## Introduction
 ### What is sweepy?
-Sweepy is an internal network scanner and IP address sweeper built in Python,Sweepy will list all (pingable) hosts that are currently connected to the network of the host using the script.
+Sweepy is an internal network scanner and IP address sweeper built in Python, Sweepy will list all (pingable) hosts that are currently connected to the network of the host using the script.
 
 ### Why using Sweepy?
 - Open source
