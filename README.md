@@ -25,7 +25,7 @@ Sweepy utilizes a lot of modules and packages, but it requires three packages to
 ### Cloning the repository
 The code can be cloned using git tool. If you're confused, please watch [this video](https://www.youtube.com/watch?v=q9wc7hUrW8U) or simply copy and paste the code bellow in your shell:
 ```
-git clone "www.github.com/0xY43/sweepy"
+git clone https://github.com/0xY43/sweepy.git
 ```
 
 ### Installing requirements
