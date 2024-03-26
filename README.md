@@ -1,5 +1,5 @@
 ## Introduction
-### What is sweepy?
+### What is Sweepy?
 Sweepy is an internal network scanner and IP address sweeper built in Python, Sweepy will list all (pingable) hosts that are currently connected to the network of the host using the script.
 
 ### Why using Sweepy?
@@ -19,7 +19,7 @@ Sweepy utilizes a lot of modules and packages, but it requires three packages to
 - multprocessing (Process and Manager)
 - subprocess
 - os
-- prettrytable (PrettyTabel)
+- prettrytable (PrettyTable)
 
 ## Installation
 ### Cloning the repository
