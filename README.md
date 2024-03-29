@@ -171,3 +171,4 @@ def ip_sweep():
 ## Todo list
 - [ ] Make the tool more reliable by showing all hosts including IOS and MacOS devices (IOS and MacOS devices are not pingable using the normal ping module for some reason)
 - [ ] Utilize nmap module to ping all hosts (even those that appear unavailable such as IOS and MacOS devices)
+- [ ] Add scanning options (using nmap module)
