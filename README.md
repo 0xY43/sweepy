@@ -167,3 +167,7 @@ def ip_sweep():
     # Print alive hosts list and show options of ip_sweep()
     results_and_options1(alive_hosts, dead_hosts)
 ```
+
+## Todo list
+- [ ] Make the tool more reliable by showing all hosts including IOS and MacOS devices (IOS and MacOS devices are not pingable using the normal ping module for some reason)
+- [ ] Utilize nmap module to ping all hosts (even those that appear unavailable such as IOS and MacOS devices)
