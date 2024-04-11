@@ -15,7 +15,7 @@ import os
 from prettytable import PrettyTable
 
 
-# CONSTANT
+# CONSTANTS
 
 
 # Global variables
@@ -71,7 +71,7 @@ def check_arguments():
 def ascii_art():
     print()
     text = pyfiglet.figlet_format("Swee.py", font="big")
-    credit = "                      GitHub.com/0xY43"
+    credit = "                      GitHub.com/HexY43"
     print(text)
     print(credit)
     print()
