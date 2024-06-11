@@ -4,8 +4,10 @@ Sweepy is an internal network scanner and IP address sweeper built in Python, Sw
 
 Please watch [this video](https://youtu.be/ohFFMTxaFmc) for detailed explanation.
 >[!NOTE] 
->PLEASE NOTE
->The demonstration shown in the video above is for the older version of Sweepy. The current version is a CLI tool that **almost guarantees** listing all hosts withing the network through doing multiple Nmap scans. 
+>PLEASE NOTE:
+>The demonstration in the video above showcases an older version of Sweepy. The current version is a CLI tool that **almost guarantees** listing all hosts within the network by performing multiple Nmap scans.
+
+
 
 ### Why using Sweepy?
 - Open source
