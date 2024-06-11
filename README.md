@@ -3,7 +3,8 @@
 Sweepy is an internal network scanner and IP address sweeper built in Python, Sweepy will list all (pingable) hosts that are currently connected to the network of the host using the script.
 
 Please watch [this video](https://youtu.be/ohFFMTxaFmc) for detailed explanation.
->[!NOTE] PLEASE NOTE
+>[!NOTE] 
+>PLEASE NOTE
 >The demonstration shown in the video above is for the older version of Sweepy. The current version is a CLI tool that **almost guarantees** listing all hosts withing the network through doing multiple Nmap scans. 
 
 ### Why using Sweepy?
