@@ -1,49 +1,122 @@
+
 #!/usr/bin/env python3
 
 # Global imports
-import pyfiglet
+import nmap
+import argparse
 import sys
 import socket
 import requests
+import threading
 import ipaddress
 from ipaddress import ip_network
 import struct
-import platform
-from multiprocessing import Process, Manager
-import subprocess
-import os
 from prettytable import PrettyTable
+import time
 
-
-# CONSTANTS
-
-
-# Global variables
-flag = '-n' if platform.system().lower()=='windows' else '-c'
-os_type = platform.system().lower
+# GLOBAL VARIABLE:
+list_of_hosts = []
 
 
 def main():
+
+    
     # Check if the host is connected to the internet or not
     if(check_internet_connection()):
-        # Check if arugments are true then continue to print ASCII art and let user make a choice
-        check_arguments()
-        clear()
-        ascii_art()
+
+        # Required arguments: -s or --subnet-mask (subnet mask)
+        args = parse_args()
+        validate_subnet_mask(args.s)
         
-        # Get choice from user and continue to execute it
-        choice = user_choice()
-        match choice:
-            case "1":
-                ip_sweep()
-            case _:
-                print("HOW DID NOT YOU SANITIZE INPUT IN THE FIRST PLACE?")
+        
+
+        # Get network information
+        network_address = get_network_information(args.s)[0]
+        
+
+        # Using mutli-threaded nmap scans to sweep and scan all hosts in the network
+        start = time.time()
+        t1 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t1.start()
+        t2 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t2.start()
+        t3 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t3.start()
+        t4 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t4.start()
+        t5 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t5.start()
+        t6 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t6.start()
+        t7 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t7.start()
+        t8 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t8.start()
+        t9 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t9.start()
+        t10 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t10.start()
+        t11 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t11.start()
+        t12 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t12.start()
+        t13 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t13.start()
+        t14 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t14.start()
+        t15 = threading.Thread(target=nmap_scan, args=(network_address,list_of_hosts))
+        t15.start()
+        t1.join()
+        t2.join()
+        t3.join()
+        t4.join()
+        t5.join()
+        t6.join()
+        t7.join()
+        t8.join()
+        t9.join()
+        t10.join()
+        t11.join()
+        t12.join()
+        t13.join()
+        t14.join()
+        t15.join()
+
+        
+        # Format hosts
+        number_of_scans = 15
+        format_list(list_of_hosts)
+        end = time.time()
+        rounded_time = round(end - start, 2)
+        print(f"The script has completed {number_of_scans} Nmap host ICMP request discovery scans for the whole network")
+        print(f"Time taken to complete the scans: {rounded_time} seconds")
+        
+
     else:
         print("Please make sure that you're connected to the internet!")
+        sys.exit(0)
 
 
+def parse_args():
+
+    parser = argparse.ArgumentParser(
+        prog="swee.py",
+        description="A simple script to perform internal network IP sweep",
+        epilog="https://github.com/HexY43/Swee.py",
+    )
+
+    parser.add_argument("-s", type=int, help="Subnet mask (Range: [0,32])", required=True)
+    args = parser.parse_args()
+    return args
 
 
+def validate_subnet_mask(subnet_mask):
+    if not 0 <= subnet_mask < 33:
+        print("Subnet mask value is between [0,32] !")
+        print("Example: swee.py -s 24")
+        sys.exit(0)
+    else:
+        return subnet_mask
 
 
 # Checks if the device is connected to the internet or no
@@ -53,142 +126,15 @@ def check_internet_connection():
         return True
     except requests.ConnectionError:
         return False
-    
+         
 
+def get_network_information(subnet_mask):
 
-# Checks for the arguments, the script doesn't take any arguments for now
-def check_arguments():
-    if  (len(sys.argv) > 1 or len(sys.argv) < 1):
-        print("Script doesn't take any argument")
-        print("Syntax: python3 swee.py")
-        sys.exit(0)
-    else:
-        return True
-
-
-
-# Prints ASCII art of the script name along with the credits
-def ascii_art():
-    print()
-    text = pyfiglet.figlet_format("Swee.py", font="big")
-    credit = "                      GitHub.com/HexY43"
-    print(text)
-    print(credit)
-    print()
-
-
-# Get choice from user and validate it (choice must be from the list)
-def user_choice():
-    print("Please make a choice:")
-    print("[1] Internal IP sweep")
-    print("[X] Exit the script")
-
-    while(True):
-        print()
-        choice = input("Choice: ")
-        match choice:
-            case "1":
-                return "1"
-            case "X" | "x":
-                sys.exit("Thank you for using the script!")
-            case _:
-                print("That is not a valid choice, please try again.")
-                print()
-
-
-
-# First choice [1]: Internal network IP sweep that lists all the connected alive hosts
-def ip_sweep():
-    clear()
-    ascii_art()
-    print()
-    print("[1] Internal IP sweep")
-    # Get subnet mask from user
-    subnet_mask = get_subnet_mask_from_user()
-    # Get the IP address of the user (as a str)
-    str_ip = get_str_ip_address()
-    # Conver str IP address to IPv4Address object
-    ipv4_ip = convert_str_to_ipv4address_object(str_ip)
-    # Get network IP address
-    network_ip_address = get_network_ip(ipv4_ip, subnet_mask)
-    # Get all pingable hosts in a list (as IPv4Address)
-    list_of_hosts = get_all_hosts_as_IPv4Address(network_ip_address)
-    # Convert these hosts to str in a tuple
-    tuple_of_hosts = convert_ipv4_to_str(list_of_hosts)
-
-
-    # Associated with ALGORITHM 1 in ping_and_add_alive_hosts()
-    # with multiprocessing.Pool(CONCURRENCY) as k:
-    #    k.map(ping_and_add_alive_hosts, y)
-    
-    # Multithreading the process of pinging all hosts and appending them to their corresponding list
-    with Manager() as manager:
-        alive_hosts = manager.list()
-        dead_hosts = manager.list()
-        processes = []
-        for ip in tuple_of_hosts:
-            p = Process(target=ping_and_add_alive_hosts, args=(alive_hosts, dead_hosts, ip))
-            p.start()
-            processes.append(p)
-        for p in processes:
-            p.join()
-        alive_hosts = list(alive_hosts)
-        dead_hosts = list(dead_hosts)
-        
-    # Print alive hosts list and show options of ip_sweep()
-    results_and_options1(alive_hosts, dead_hosts)
-
-
-# Prints the results and shows options of [1] (ip_sweep())
-def results_and_options1(alive_hosts, dead_hosts):
-    clear()
-    ascii_art()
-
-    # Print output as table
-    length = len(alive_hosts)
-    columns = ["Host"]
-    table = PrettyTable()
-    table.header = False
-    table.title = f"Connected hosts ({length})"
-    table.add_column(columns[0],alive_hosts)
-    print(table)
-
-    # Options
-    print()
-    print("Please make a choice:")
-    print("[1] Export connected hosts to a text file")
-    print("[X] Exit the script")
-    print()
-    while(True):
-        match input("Choice: "):
-            case "1":
-                with open("Internal sweep.txt", "w") as file:
-                    for ip in alive_hosts:
-                        file.write(str(ip) + "\n")
-                print()
-                print("Done!")
-                sys.exit("Thank you for using the script!")
-            case "X" | "x":
-                sys.exit("Thank you for using the script!")
-            case _:
-                print("That is not a valid choice, please try again.")
-    
-
-
-# Validates user input (validate subnet mask)
-def get_subnet_mask_from_user():
-    while(True):
-        try:
-            subnet_mask = int(input("Subnet mask: "))
-            if not 0 <= subnet_mask < 33:
-                print("subnet mask value is between [0,32] !")
-                print("Example - Subnetmask: 24")
-                print()
-            else:
-                return subnet_mask
-        except ValueError:
-            print("subnet mask is an integer value, please try again!")
-            print()
+    str_ipv4 = get_str_ip_address()
+    ipv4_ip_object = convert_str_to_ipv4address_object(str_ipv4)
+    network_address = get_network_ip(ipv4_ip_object, subnet_mask)
+    network_address_str = format(network_address)
+    return [network_address_str]
 
 
 # Fetches the IP address of the host running the script
@@ -236,40 +182,35 @@ def convert_ipv4_to_str(ip_ipv4_list):
     return ip_str_tuple
 
 
-# Ping all hosts and capture alive ones
-def ping_and_add_alive_hosts(alive_hosts, dead_hosts, ip):
-
-    # ALGORITHM 1
-    #desired_path = str(pathlib.Path(__file__).parent.resolve()) + "/pings"
-    #if not os.path.exists(desired_path):
-    #    os.makedirs(desired_path)
-    #for ip in ip_list:
-    #    response = os.system(f"ping {flag} 1 {ip} > {desired_path}/{ip}.txt")
-    #    if (response == 0):
-    #        alive_hosts.append(ip)
-    #    else:
-    #        dead_hosts.append(ip)
-
-    # ALGORITHM 2
-    response = subprocess.call(["ping", "-w", "1450",f"{flag}", "1", ip], stdout=subprocess.DEVNULL)
-    if (response == 0):
-        #print(f"{ip} is alive :D")
-        alive_hosts.append(ip)
-    else:
-        #print(f"{ip} is dead D:")
-        dead_hosts.append(ip)
+# Nmap Scan function
+def nmap_scan(network_address,list_of_hosts):
+    # start = time.time()
+    # nm = nmap.PortScanner()
+    # hosts_list = []
+    # number_of_scans = 5
+    # for i in range(number_of_scans):
+    #     nm.scan(hosts=network_address, arguments="-sn -PE")
+    #     for x in nm.all_hosts():
+    #         if x not in hosts_list:
+    #             hosts_list.append(x)
+    
+    nm = nmap.PortScanner()
+    nm.scan(hosts=network_address, arguments="-sn -PE")
+    for x in nm.all_hosts():
+        if x not in list_of_hosts:
+            list_of_hosts.append(x)
+    return list_of_hosts
 
 
-# Clears the output of the terminal
-def clear():
-    # Clearing all previous output
-    if (os_type() == "linux"):
-        os.system("clear")
-    elif (os_type() == "windows"):
-        os.system("cls")
-    else:
-        os.system("CLS")
-
+# Format hosts
+def format_list(hosts_list_set):
+    length = len(hosts_list_set)
+    columns = ["Host"]
+    table = PrettyTable()
+    table.header = False
+    table.title = f"Connected hosts ({length})"
+    table.add_column(columns[0],hosts_list_set)
+    print(f"{table}")
 
 
 if __name__ == "__main__":
